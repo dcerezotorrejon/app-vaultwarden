@@ -16,6 +16,10 @@ env:
   BUILD_FROM: ghcr.io/hassio-addons/debian-base:9.3.0
 
 jobs:
+  # Renovate merges a pin bump on its own, and that push lands here before
+  # stamp.yaml has raised the add-on version. Publishing at that moment would
+  # push a different Vaultwarden under a tag that already exists. Wait for the
+  # stamp instead — it dispatches this workflow once the two agree.
   check:
     runs-on: ubuntu-latest
     outputs:
@@ -24,13 +28,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Read version from config.yaml
+      - name: Check the pin against the changelog
         id: consistency
         run: |
           version=$(sed -n 's|^version: \(.*\)$|\1|p' vaultwarden/config.yaml)
+          pinned=$(sed -n \
+            's|^FROM "vaultwarden/server:\(.*\)" AS vaultwarden$|\1|p' \
+            vaultwarden/Dockerfile)
+          shipped=$(sed -n \
+            's|^- .* Update Vaultwarden to \([0-9][0-9.]*\)$|\1|p' \
+            vaultwarden/CHANGELOG.md | head -n1)
+
           echo "version=${version}" >> "$GITHUB_OUTPUT"
-          echo "publish=true" >> "$GITHUB_OUTPUT"
-          echo "Publishing add-on ${version}." >> "$GITHUB_STEP_SUMMARY"
+          if [[ "${pinned}" == "${shipped}" ]]; then
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+            echo "Publishing add-on ${version} (Vaultwarden ${pinned})." \
+              >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Pinned ${pinned} but ${shipped} is released; waiting for Stamp"
+            echo "Skipped: add-on ${version} still ships ${shipped}, pin is ${pinned}." \
+              >> "$GITHUB_STEP_SUMMARY"
+          fi
 
   deploy:
     needs: check
