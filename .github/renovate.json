@@ -46,13 +46,13 @@
     {
       "groupName": "App base image",
       "matchDatasources": ["docker"],
-      "matchDepNames": ["ghcr.io/hassio-addons/debian-base"]
+      "matchDepNames": ["ghcr.io/hassio-addons/alpine-base"]
     },
     {
       "groupName": "App base image",
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["minor", "patch"],
-      "matchDepNames": ["ghcr.io/hassio-addons/debian-base"],
+      "matchDepNames": ["ghcr.io/hassio-addons/alpine-base"],
       "automerge": true
     },
     {

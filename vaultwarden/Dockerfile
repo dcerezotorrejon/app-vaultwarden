@@ -1,8 +1,8 @@
-ARG BUILD_FROM=ghcr.io/hassio-addons/debian-base:9.3.0
+ARG BUILD_FROM=ghcr.io/hassio-addons/alpine-base:17.3.0
 ###############################################################################
 # Get prebuilt containers from Vaultwarden
 ###############################################################################
-FROM "vaultwarden/server:1.37.1" AS vaultwarden
+FROM "vaultwarden/server:1.37.1-alpine" AS vaultwarden
 
 ###############################################################################
 # Build the actual app.
@@ -20,14 +20,11 @@ COPY --from=vaultwarden /web-vault /opt/web-vault
 # add Nginx
 # hadolint ignore=DL3009
 RUN \
-    apt-get update \
-    \
-    && apt-get install -y --no-install-recommends \
-        libmariadb-dev-compat=1:11.8.6-0+deb13u1 \
-        libpq5=17.10-0+deb13u1 \
-        nginx=1.26.3-3+deb13u7 \
-        sqlite3=3.46.1-7+deb13u1 \
-    && apt-get clean \
+    apk add --no-cache \
+        mariadb-connector-c \
+        postgresql-libs \
+        nginx \
+        sqlite-libs \
     && rm -f -r \
         /etc/nginx \
     \
