@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0
+
+- ⚡ Migración de la imagen base a Alpine Linux para un contenedor más ligero y seguro
+
 ## 0.28.3
 
 - Moved changelog
