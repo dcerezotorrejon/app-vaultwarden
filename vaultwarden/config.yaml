@@ -4,7 +4,7 @@ version: 1.0.0
 slug: bitwarden-custom
 description: Open source password management solution
 url: https://github.com/dcerezotorrejon/app-vaultwarden
-image: "ghcr.io/dcerezotorrejon/bitwarden"
+#image: "ghcr.io/dcerezotorrejon/bitwarden"
 webui: "[PROTO:ssl]://[HOST]:[PORT:7277]"
 init: false
 arch:

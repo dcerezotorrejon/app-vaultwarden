@@ -13,7 +13,7 @@ permissions:
 
 env:
   IMAGE_NAME: ghcr.io/dcerezotorrejon/bitwarden
-  BUILD_FROM: ghcr.io/hassio-addons/alpine-base:17.3.0
+  BUILD_FROM: ghcr.io/hassio-addons/base:21.0.1
 
 jobs:
   # Renovate merges a pin bump on its own, and that push lands here before

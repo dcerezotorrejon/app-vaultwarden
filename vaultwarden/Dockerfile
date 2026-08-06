@@ -1,4 +1,4 @@
-ARG BUILD_FROM=ghcr.io/hassio-addons/alpine-base:17.3.0
+ARG BUILD_FROM=ghcr.io/hassio-addons/base:21.0.1
 ###############################################################################
 # Get prebuilt containers from Vaultwarden
 ###############################################################################
@@ -21,6 +21,7 @@ COPY --from=vaultwarden /web-vault /opt/web-vault
 # hadolint ignore=DL3009
 RUN \
     apk add --no-cache \
+        openssl \
         mariadb-connector-c \
         postgresql-libs \
         nginx \
