@@ -1,8 +1,8 @@
 # Changelog
 
 ## 1.0.0
-
-- ⚡ Migración de la imagen base a Alpine Linux para un contenedor más ligero y seguro
+- ⚡ Migration of base image form Debian to Alpine
+- Update Vaultwarden to 1.37.1
 
 ## 0.28.3
 

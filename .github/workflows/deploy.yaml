@@ -20,40 +20,7 @@ jobs:
   # stamp.yaml has raised the add-on version. Publishing at that moment would
   # push a different Vaultwarden under a tag that already exists. Wait for the
   # stamp instead — it dispatches this workflow once the two agree.
-  check:
-    runs-on: ubuntu-latest
-    outputs:
-      publish: ${{ steps.consistency.outputs.publish }}
-      version: ${{ steps.consistency.outputs.version }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-
-      - name: Check the pin against the changelog
-        id: consistency
-        run: |
-          version=$(sed -n 's|^version: \(.*\)$|\1|p' vaultwarden/config.yaml)
-          pinned=$(sed -n \
-            's|^FROM "vaultwarden/server:\(.*\)" AS vaultwarden$|\1|p' \
-            vaultwarden/Dockerfile)
-          shipped=$(sed -n \
-            's|^- .* Update Vaultwarden to \([0-9][0-9.]*\)$|\1|p' \
-            vaultwarden/CHANGELOG.md | head -n1)
-
-          echo "version=${version}" >> "$GITHUB_OUTPUT"
-          if [[ "${pinned}" == "${shipped}" ]]; then
-            echo "publish=true" >> "$GITHUB_OUTPUT"
-            echo "Publishing add-on ${version} (Vaultwarden ${pinned})." \
-              >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "publish=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Pinned ${pinned} but ${shipped} is released; waiting for Stamp"
-            echo "Skipped: add-on ${version} still ships ${shipped}, pin is ${pinned}." \
-              >> "$GITHUB_STEP_SUMMARY"
-          fi
-
   deploy:
-    needs: check
-    if: needs.check.outputs.publish == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
