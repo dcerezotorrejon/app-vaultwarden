@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["helpers:pinGitHubActionDigests"],
   "rebaseWhen": "behind-base-branch",
-  "platformAutomerge": true,
+  "platformAutomerge": false,
   "dependencyDashboard": true,
   "labels": ["dependencies", "no-stale"],
   "commitMessagePrefix": "⬆️",
@@ -18,17 +18,7 @@
       ],
       "datasourceTemplate": "docker"
     },
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["//Dockerfile$/"],
-      "matchStringsStrategy": "any",
-      "matchStrings": [
-        "\\s\\s(?<package>[a-z0-9][a-z0-9-]+)=(?<currentValue>[a-z0-9-:_+~.]+)\\s+"
-      ],
-      "versioningTemplate": "deb",
-      "datasourceTemplate": "repology",
-      "depNameTemplate": "debian_13/{{{replace 'libpq5' 'postgresql-13' package}}}"
-    },
+    
     {
       "customType": "regex",
       "managerFilePatterns": ["//Dockerfile$/"],
@@ -41,26 +31,26 @@
   "packageRules": [
     {
       "matchDatasources": ["repology"],
-      "automerge": true
+      "automerge": false
     },
     {
       "groupName": "App base image",
       "matchDatasources": ["docker"],
       "matchDepNames": ["ghcr.io/hassio-addons/base"],
-      "automerge": true
+      "automerge": false
     },
     {
       "groupName": "App base image",
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["minor", "patch"],
       "matchDepNames": ["ghcr.io/hassio-addons/base"],
-      "automerge": true
+      "automerge": false
     },
     {
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["minor", "patch"],
       "matchDepNames": ["vaultwarden/server"],
-      "automerge": true
+      "automerge": false
     }
   ]
 }

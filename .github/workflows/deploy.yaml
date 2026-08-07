@@ -8,18 +8,16 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  packages: write
+   contents: write
+   packages: write
 
 env:
   IMAGE_NAME: ghcr.io/dcerezotorrejon/bitwarden
   BUILD_FROM: ghcr.io/hassio-addons/base:21.0.1
 
 jobs:
-  # Renovate merges a pin bump on its own, and that push lands here before
-  # stamp.yaml has raised the add-on version. Publishing at that moment would
-  # push a different Vaultwarden under a tag that already exists. Wait for the
-  # stamp instead — it dispatches this workflow once the two agree.
+  # Deploys the add-on when changes are pushed to main (with the version
+  # already bumped by Renovate PR workflow).
   deploy:
     runs-on: ubuntu-latest
     steps:
@@ -30,6 +28,17 @@ jobs:
         run: |
           version=$(yq -r '.version' vaultwarden/config.yaml)
           echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          VERSION=$(yq -r '.version' vaultwarden/config.yaml)
+          git fetch --tags
+          if git rev-parse -q --verify "refs/tags/v${VERSION}"; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - uses: docker/setup-qemu-action@96fe6ef7f33517b61c61be40b68a1882f3264fb8 # v4
 
@@ -42,6 +51,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
+        if: ${{ steps.check_tag.outputs.exists != 'true' }}
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7
         with:
           context: vaultwarden
@@ -58,3 +68,11 @@ jobs:
             ${{ env.IMAGE_NAME }}:latest
             ${{ env.IMAGE_NAME }}:${{ steps.addon.outputs.version }}
           push: true
+      - name: Create and push tag
+        if: ${{ steps.check_tag.outputs.exists != 'true' }}
+        run: |
+          VERSION=$(yq -r '.version' vaultwarden/config.yaml)
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag "v${VERSION}"
+          git push origin "v${VERSION}"

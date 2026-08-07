@@ -68,7 +68,8 @@ Thank you for being involved! :heart_eyes:
 
 ## Authors & contributors
 
-The original setup of this repository is by [Franck Nijhof][frenck].
+Fork maintained by [Daniel Cerezo][daniel], based on original work by
+[Franck Nijhof][frenck].
 
 For a full list of all authors and contributors,
 check [the contributor's page][contributors].
@@ -112,6 +113,7 @@ SOFTWARE.
 [discord-ha]: https://discord.gg/c5DvZ4e
 [discord-shield]: https://img.shields.io/discord/478094546522079232.svg
 [discord]: https://discord.me/hassioaddons
+[daniel]: https://github.com/dcerezotorrejon
 [docs]: https://github.com/hassio-addons/app-vaultwarden/blob/main/vaultwarden/DOCS.md
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg
 [forum]: https://community.home-assistant.io/t/home-assistant-community-add-on-bitwarden-rs/115573?u=frenck

@@ -1,0 +1,41 @@
+---
+name: PR Bump
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    if: github.actor == 'renovate[bot]' || startsWith(github.head_ref, 'renovate/')
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.head_ref }}
+          persist-credentials: true
+
+      - name: Run update script
+        id: bump
+        run: .github/scripts/update-addon.sh
+
+      - name: Commit and push changes
+        if: steps.bump.outputs.changed == 'true'
+        env:
+          VERSION: ${{ steps.bump.outputs.version }}
+          ADDON_VERSION: ${{ steps.bump.outputs.addon_version }}
+          BUMP_TYPE: ${{ steps.bump.outputs.bump_type }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md vaultwarden/config.yaml vaultwarden/CHANGELOG.md vaultwarden/Dockerfile vaultwarden/build.yaml
+          git commit -m "🔖 Bump add-on version to ${ADDON_VERSION}" \
+                     -m "Performed ${BUMP_TYPE} version bump for update."
+          git push

@@ -141,7 +141,8 @@ You could also [open an issue here][issue] GitHub.
 
 ## Authors & contributors
 
-The original setup of this repository is by [Franck Nijhof][frenck].
+Fork maintained by [Daniel Cerezo][daniel], based on original work by
+[Franck Nijhof][frenck].
 
 For a full list of all authors and contributors,
 check [the contributor's page][contributors].
@@ -173,6 +174,7 @@ SOFTWARE.
 [addon-badge]: https://my.home-assistant.io/badges/supervisor_addon.svg
 [addon]: https://my.home-assistant.io/redirect/supervisor_addon/?addon=a0d7b954_bitwarden&repository_url=https%3A%2F%2Fgithub.com%2Fhassio-addons%2Frepository
 [contributors]: https://github.com/hassio-addons/app-vaultwarden/graphs/contributors
+[daniel]: https://github.com/dcerezotorrejon
 [discord-ha]: https://discord.gg/c5DvZ4e
 [discord]: https://discord.me/hassioaddons
 [forum]: https://community.home-assistant.io/t/home-assistant-community-add-on-bitwarden-rs/115573?u=frenck
