@@ -2,7 +2,7 @@ ARG BUILD_FROM=ghcr.io/hassio-addons/base:21.0.1
 ###############################################################################
 # Get prebuilt containers from Vaultwarden
 ###############################################################################
-FROM "vaultwarden/server:1.37.1-alpine" AS vaultwarden
+FROM vaultwarden/server:1.37.1-alpine AS vaultwarden
 
 ###############################################################################
 # Build the actual app.
