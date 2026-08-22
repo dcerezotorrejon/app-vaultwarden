@@ -1,4 +1,8 @@
 # Changelog
+
+## 1.1.0
+
+- ⬆️ Update dependencies
 ## 1.0.2
 - Minimal change in dockerfile
 
